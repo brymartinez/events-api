@@ -10,6 +10,8 @@ use App\Models\EventSchedules;
 use App\Models\User;
 use Carbon\Carbon;
 
+use App\Rules\OnceOffEndDateTimeRule;
+
 class EventController extends Controller
 {
     public function index()
@@ -25,7 +27,7 @@ class EventController extends Controller
             'eventName' => ['required'],
             'frequency' => ['required', Rule::in(['Once-Off', 'Weekly', 'Monthly'])],
             'startDateTime' => ['required', 'date_format:Y-m-d H:i'],
-            'endDateTime' => ['nullable', 'date_format:Y-m-d H:i'],
+            'endDateTime' => ['nullable', 'date_format:Y-m-d H:i', new OnceOffEndDateTimeRule],
             'duration' => ['required', 'integer', 'numeric'],
             'invitees' => ['required', 'array', function ($attribute, $value, $fail) {
                 foreach ($value as $item) {
