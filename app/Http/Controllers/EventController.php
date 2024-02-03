@@ -63,6 +63,14 @@ class EventController extends Controller
         // TODO - use $possibleSchedules above
         $eventSvc->createSchedules($events, $possibleSchedules);
 
-        return response()->json(["message" => "Event added" ], 201);
+        return response()->json([
+            'id' => $events->id,
+            'eventName' => $events->name,
+            'frequency' => $events->frequency,
+            'startDateTime' => $events->start_date_time->toDateTimeString(),
+            'endDateTime' => $events->end_date_time ? $events->end_date_time->toDateTimeString() : null,
+            'duration' => $events->duration,
+            'invitees' => $events->invitees,
+        ], 201);
     }
 }
