@@ -19,10 +19,44 @@ use App\Rules\ValidInviteesRule;
 
 class EventController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $events = Events::all();
-        return response()->json($events);
+        $from = $request->input('from');
+        $to = $request->input('to');
+
+        if ($from && !$to) {
+            return response()->json(['error' => 'Please provide a "to" field.'], 400);
+        }
+
+        $invitees = $request->input('invitees');
+
+        $query = Events::query();
+
+        if ($from) {
+            $query->where('start_date_time', '>=', $from);
+            $query->where('start_date_time', '<=', $to);
+        }
+
+        if ($invitees) {
+            $inviteesArray = explode(',', $invitees);
+            foreach ($inviteesArray as $invitee) {
+                $query->whereJsonContains('invitees', [(int)$invitee]);
+            }
+        }
+
+        $events = $query->get();
+
+        $mappedEvents = $events->map(function ($event) {
+            return [
+                'event_id' => $event->id,
+                'eventName' => $event->name,
+                'startDateTime' => $event->start_date_time,
+                'endDateTime' => $event->end_date_time,
+                'invitees' => $event->invitees,
+            ];
+        });
+
+        return response()->json(['items' => $mappedEvents]);
     }
 
     public function store(Request $request)
