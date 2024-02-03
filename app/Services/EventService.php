@@ -7,7 +7,7 @@ use Carbon\Carbon;
 
 class EventService
 {
-    public function createSchedules($request, $events) {
+    public function createSchedules($events) {
         // Create event schedule entries
         $currentStartDateTime = $events->start_date_time;
         $currentEndDateTime = $events->start_date_time->copy()->addMInutes($events->duratio);
@@ -24,7 +24,7 @@ class EventService
             ];
 
             $currentStartDateTime = Carbon::parse($currentStartDateTime)->addWeeks(1); // Only for weekly. Use frequency as basis
-            $currentEndDateTime = Carbon::parse($currentStartDateTime)->addMinutes($request->duration);
+            $currentEndDateTime = Carbon::parse($currentStartDateTime)->addMinutes($events->duration);
         }
 
         EventSchedules::insert($batchData);

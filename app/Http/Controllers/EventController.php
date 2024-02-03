@@ -53,7 +53,7 @@ class EventController extends Controller
 
         $eventSvc = new EventService();
 
-        $eventSvc->createSchedules($request, $events);
+        $eventSvc->createSchedules($events);
 
         return response()->json(["message" => "Event added" ], 201);
     }
