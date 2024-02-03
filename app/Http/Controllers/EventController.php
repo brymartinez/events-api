@@ -11,6 +11,8 @@ use App\Models\User;
 use Carbon\Carbon;
 
 use App\Rules\OnceOffEndDateTimeRule;
+use App\Rules\ValidInviteesRule;
+
 
 class EventController extends Controller
 {
@@ -35,7 +37,7 @@ class EventController extends Controller
                         $fail($attribute.' must contain only integers.');
                     }
                 }
-            }],
+            }, new ValidInviteesRule],
         ]);
 
         $events = new Events;
