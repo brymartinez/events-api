@@ -10,5 +10,6 @@ php artisan serve
 ```
 
 ## Considerations
+ - This is my very first attempt at creating an API using Laravel. I have no prior knowledge of PHP aside from reading Wordpress files.
  - `Carbon` takes care of the monthly/weekly problem.
- - No unit tests were created.
+ - No unit tests were created as it would take a lot of time.
