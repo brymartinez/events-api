@@ -21,18 +21,16 @@ class EventOverlapRule implements Rule
 
     public function passes($attribute, $value)
     {
-        // Compare the event schedules that will be spawned to existing event schedules.
-        // compare start time / start time + duration while start time is not yet end time
-        // Nothing should fall between event_schedule.start_date_time and event_schedule.end_time
         foreach ($this->possibleSchedules as $schedule) {
             $startDateTime = $schedule['start_date_time'];
             $endDateTime = $schedule['end_date_time'];
             Log::info("S: $startDateTime, E: $endDateTime");
 
-
             $overlappingEventsExist = EventSchedules::where(function ($query) use ($startDateTime, $endDateTime) {
-                $query->where('start_date_time', '>=', $startDateTime)
-                      ->where('end_date_time', '<=', $endDateTime);
+                $query->where('start_date_time', '<=', $startDateTime)
+                      ->where('end_date_time', '>', $startDateTime)
+                      ->orWhere('start_date_time', '<=', $endDateTime)
+                      ->where('end_date_time', '>', $endDateTime);
             })->exists();
 
             if ($overlappingEventsExist) {
