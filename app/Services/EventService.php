@@ -37,28 +37,20 @@ class EventService
         return $schedules;
     }
 
-    public function createSchedules($events) {
+    public function createSchedules($events, $schedules) {
         // Create event schedule entries
         $currentStartDateTime = Carbon::parse($events->start_date_time);
         $currentEndDateTime = Carbon::parse($events->start_date_time)->copy()->addMInutes($events->duration);
 
         $batchData = [];
 
-        do {
+        foreach ($schedules as $schedule) {
             $batchData[] = [
                 'event_id' => $events->id,
-                'start_date_time' => $currentStartDateTime,
-                'end_date_time' => $currentEndDateTime,
+                'start_date_time' => Carbon::parse($schedule['start_date_time']),
+                'end_date_time' => Carbon::parse($schedule['end_date_time']),
             ];
-
-            if ($events->frequency === 'Weekly') {
-                $currentStartDateTime = $currentStartDateTime->copy()->addWeeks(1);
-            } elseif ($events->frequency === 'Monthly') {
-                $currentStartDateTime = $currentStartDateTime->copy()->addMonths(1);
-            }
-
-            $currentEndDateTime = $currentStartDateTime->copy()->addMinutes($events->duration);
-        } while ($currentEndDateTime->lte(($events->end_date_time ?: $events->start_date_time->copy()->addYear())) && $events->frequency !== 'Once-Off');
+        }
 
         EventSchedules::insert($batchData);
     }

@@ -61,7 +61,7 @@ class EventController extends Controller
         $events->save();
 
         // TODO - use $possibleSchedules above
-        $eventSvc->createSchedules($events);
+        $eventSvc->createSchedules($events, $possibleSchedules);
 
         return response()->json(["message" => "Event added" ], 201);
     }
