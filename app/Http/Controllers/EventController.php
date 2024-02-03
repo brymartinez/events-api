@@ -10,6 +10,8 @@ use App\Models\EventSchedules;
 use App\Models\User;
 use Carbon\Carbon;
 
+use App\Services\EventService;
+
 use App\Rules\OnceOffEndDateTimeRule;
 use App\Rules\ValidInviteesRule;
 
@@ -48,6 +50,10 @@ class EventController extends Controller
         $events->duration = $request->duration;
         $events->invitees = $request->invitees;
         $events->save();
+
+        $eventSvc = new EventService();
+
+        $eventSvc->createSchedules($request, $events);
 
         return response()->json(["message" => "Event added" ], 201);
     }

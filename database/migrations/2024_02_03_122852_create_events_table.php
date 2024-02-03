@@ -18,6 +18,7 @@ return new class extends Migration
             $table->timestamp('start_date_time');
             $table->timestamp('end_date_time')->nullable();
             $table->integer('duration');
+            $table->json('invitees');
             $table->timestamps();
         });
     }

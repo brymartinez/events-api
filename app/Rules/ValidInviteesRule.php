@@ -5,7 +5,7 @@ namespace App\Rules;
 use Illuminate\Contracts\Validation\Rule;
 use App\Models\User;
 
-class ValidInvitees implements Rule
+class ValidInviteesRule implements Rule
 {
     public function passes($attribute, $value)
     {
