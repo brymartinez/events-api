@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('event_schedules', function (Blueprint $table) {
             $table->id();
             $table->foreignId('event_id');
-            $table->foreignId('user_id');
+            $table->timestamp('start_date_time');
+            $table->timestamp('end_date_time');
             $table->timestamps();
         });
     }

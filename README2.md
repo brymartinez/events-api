@@ -5,6 +5,6 @@ cp .env.example .env # Edit according to `docker-compose.yml` credentials
 composer install
 php artisan key:generate
 php artisan migrate
-php artisan db:seed
+php artisan db:seed --class=UsersSeeder
 php artisan serve
 ```
